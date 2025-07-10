@@ -1,0 +1,64 @@
+# R and RStudio files
+.Rhistory
+.RData
+.Ruserdata
+*.Rproj.user/
+*.Rproj
+
+# frechesTest package git directory
+frechesTest/.git/
+frechesTest/.gitignore
+
+# Large data files (to be handled separately)
+db1b_raw/
+data/in/eora_io_data/
+*.csv
+*.zip
+*.rds
+*.RData
+
+# Temporary and output files
+*.log
+*.aux
+*.out
+*~
+
+# Mac system files
+.DS_Store
+
+# Exclude unnecessary analysis files (keeping only core replication files)
+FAA.R
+FAA_subgraphs.R
+WDI.R
+WID_LATEST.R
+WID_latest copy.R
+WID_new.R
+WID_working.R
+analysis_FAA.R
+analysis_enplanements.R
+analysis_radio.R
+bunching_test.R
+documentation.R
+grabFAAData.R
+occ_anova_original.R
+process_db1b.R
+test_WID_PPP_full_matrix.R
+frechet-jump-visualization.html
+metric-space-visualization.html
+WID_PPP_full_matrix.R
+
+# Exclude Network-Regression folder
+Network-Regression-with-Graph-Laplacians/
+
+# Exclude frechet package folder
+frechet/
+
+# Keep only necessary output
+frechesTest/path/
+frechesTest/test.R
+frechesTest/docs/
+frechesTest/figs/powercurves/
+
+# Temporary outputs
+*.tex~
+*.png~
