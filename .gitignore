@@ -62,3 +62,6 @@ frechesTest/figs/powercurves/
 # Temporary outputs
 *.tex~
 *.png~
+
+# Archive directory (old/unused files)
+_archive/
