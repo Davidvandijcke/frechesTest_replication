@@ -47,26 +47,58 @@ The required packages are automatically installed by running `00_prep.R`. Key pa
 
 ## Data Requirements
 
-Due to size constraints, data files are not included in this repository. The code uses publicly available data that can be obtained as follows:
+The complete data required for replication is available from openICPSR at: [URL to be added after upload]
 
-### 1. SIPP Data (for occupation analysis)
-- Run `10_grabSIPP.R` to download SIPP data from Census Bureau
-- Then run `processSIPP.R` to process the raw data
-- Output: `data/out/sipp_job_panel.csv`
+### Data Download and Setup
 
-### 2. World Bank Data (for income classification analysis)
-- Automatically downloaded via WDI package when running `WID_PPP.R`
-- EORA Input-Output tables: Download from https://worldmrio.com/
-- Place in `data/in/eora_io_data/` with structure:
-  ```
-  data/in/eora_io_data/
-  ├── 2010/
-  ├── 2011/
-  └── ... (through 2015)
-  ```
+1. **Download the replication data** from openICPSR
+   - The data archive contains a `data_clean/` folder (48GB compressed)
+   - Extract this folder and rename it to `data/`
+   - Place it in the same directory as this code folder
 
-### 3. Simulation Data
-- No external data required - simulations generate synthetic data
+2. **Verify the data structure**:
+   ```
+   data/
+   ├── in/
+   │   ├── sipp_raw/             # Raw SIPP data files (52 zip files)
+   │   ├── sipp_unzipped/        # Pre-unzipped SIPP data (10 .dta files)
+   │   ├── SIPP_data_dictionaries/
+   │   ├── eora_io_data_2010/    # EORA I-O data by year
+   │   ├── eora_io_data_2011/
+   │   ├── ... (through 2021)
+   │   ├── oecd_io_data/         # OECD I-O data files
+   │   └── Eora26Structure.xlsx
+   └── out/
+       └── sipp_job_panel.csv    # Pre-processed SIPP panel (if included)
+   ```
+
+### Data Sources (for reference)
+
+The data archive contains processed versions of:
+
+1. **SIPP Data** (Survey of Income and Program Participation)
+   - Source: U.S. Census Bureau
+   - Years: 2008-2023
+   - Used for occupation/industry transition analysis
+
+2. **EORA Input-Output Tables**
+   - Source: https://worldmrio.com/
+   - Years: 2010-2021
+   - Used for World Bank income classification analysis
+
+3. **OECD Input-Output Data**
+   - Source: OECD.Stat
+   - Pre-processed .rdata files included
+
+### Alternative: Download Raw Data
+
+If you prefer to download the original data sources:
+
+1. **SIPP Data**: Run `Applications/10_grabSIPP.R` (downloads from Census Bureau)
+2. **EORA Data**: Register and download from https://worldmrio.com/
+3. **OECD Data**: Run the included `data/in/getOECD_IO.R` script
+
+Note: The raw data download will be significantly larger (>200GB) and require additional processing.
 
 ## Replication Instructions
 

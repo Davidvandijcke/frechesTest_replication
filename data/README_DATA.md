@@ -1,114 +1,88 @@
 # Data Instructions for Replication
 
-This document provides detailed instructions for obtaining and organizing the data needed for replication.
+This document provides instructions for obtaining and organizing the data needed for replication.
 
-## Data Structure
+## Quick Start: Download from openICPSR
 
-The code expects the following directory structure:
+**The complete replication data is available at**: [openICPSR URL - to be added after upload]
 
+### Setup Instructions:
+1. Download the data archive from openICPSR (48GB)
+2. Extract the `data_clean/` folder from the archive
+3. Rename `data_clean/` to `data/`
+4. Place it at the same level as the `code/` directory (not inside it)
+
+Your directory structure should look like:
 ```
-data/
-├── in/                      # Input data (raw)
-│   ├── eora_io_data/        # EORA Input-Output tables
-│   │   ├── 2010/
-│   │   ├── 2011/
-│   │   ├── 2012/
-│   │   ├── 2013/
-│   │   ├── 2014/
-│   │   └── 2015/
-│   └── [SIPP files downloaded by 10_grabSIPP.R]
-│
-├── by/                      # Intermediate data (created by processing scripts)
-│
-└── out/                     # Processed data
-    └── sipp_job_panel.csv   # Created by processSIPP.R
+frechet_anova/
+├── code/        # This repository
+├── data/        # Data from openICPSR (renamed from data_clean/)
+│   ├── in/
+│   └── out/
+├── figs/        # Will be created by code
+└── tabs/        # Will be created by code
 ```
 
-## 1. SIPP Data (Survey of Income and Program Participation)
+## Data Contents
 
-**Source**: U.S. Census Bureau  
-**Access**: Public, downloaded via API
+The openICPSR archive contains all necessary data files:
 
-### Instructions:
-1. Run `10_grabSIPP.R` to automatically download SIPP data files
-2. Run `processSIPP.R` to process the raw files
-3. This creates `data/out/sipp_job_panel.csv` used in `occ_anova.R`
+### Input Data (`data/in/`)
+- **SIPP Data** (2008-2023)
+  - `sipp_raw/`: 52 raw zip files from Census Bureau
+  - `sipp_unzipped/`: 10 pre-unzipped .dta files
+  - `SIPP_data_dictionaries/`: PDF documentation
 
-**Size**: ~500 MB raw, ~100 MB processed
+- **EORA Input-Output Tables** (2010-2021)
+  - `eora_io_data_YYYY/`: Separate folder for each year
+  - Each contains trade matrices (T), value added (VA), final demand (FD), etc.
 
-## 2. EORA Input-Output Tables
+- **OECD Input-Output Data**
+  - `oecd_io_data/`: Pre-processed .rdata files
 
-**Source**: EORA Global Supply Chain Database  
-**Website**: https://worldmrio.com/  
-**Access**: Free registration required
+### Output Data (`data/out/`)
+- Initially empty (files created during replication)
+- `sipp_job_panel.csv` will be created by `processSIPP.R`
 
-### Instructions:
+## Alternative: Download from Original Sources
+
+If you prefer to download data from original sources:
+
+### 1. SIPP Data
+```r
+# From the code directory:
+source("Applications/10_grabSIPP.R")  # Downloads from Census Bureau
+source("Applications/processSIPP.R")   # Processes the data
+```
+
+### 2. EORA Input-Output Tables
 1. Register at https://worldmrio.com/
-2. Download "Basic prices" tables for years 2010-2015
-3. For each year, download the ZIP file containing:
-   - The inter-industry transaction matrix (Z matrix)
-   - Labels files
-4. Extract each year's data into `data/in/eora_io_data/YYYY/`
-5. Required files per year:
-   - `Eora26_YYYY_bp/Eora26_YYYY_bp_T.txt` (transaction matrix)
-   - `Eora26_YYYY_bp/labels_T.txt` (sector/country labels)
+2. Download "Eora26" Basic Prices tables for years 2010-2021
+3. Extract each year to `data/in/eora_io_data_YYYY/`
 
-**Size**: ~2 GB total (can be processed year-by-year to save space)
+### 3. OECD Data
+```r
+# The script to download OECD data is at:
+source("../data/in/getOECD_IO.R")
+```
 
-### Alternative: Zenodo Data Archive
+## Important Notes
 
-To facilitate replication without downloading from multiple sources, we provide a Zenodo archive with all necessary data files pre-organized:
+1. **Path Configuration**: The code expects the data folder to be at `../data/` relative to the code directory. This is set in `000_master.R`.
 
-**DOI**: [To be added upon publication]  
-**Contents**:
-- Processed SIPP panel data
-- EORA I-O matrices (2010-2015)
-- World Bank income thresholds
-- All intermediate files
+2. **Memory Requirements**: Processing the full dataset requires ~16GB RAM. For limited memory:
+   - Process years sequentially in `WID_PPP.R`
+   - Use fewer parallel cores in simulations
 
-**Instructions for Zenodo data**:
-1. Download the archive from Zenodo
-2. Extract to the `data/` directory
-3. Verify the directory structure matches above
-
-## 3. Other Data Sources
-
-### World Bank Data
-- Downloaded automatically via the `WDI` R package
-- No manual download needed
-
-### NAICS/SOC Classification Data
-- Downloaded automatically from BLS websites in `occ_anova.R`
-- No manual download needed
-
-## Data Size Management Strategy
-
-Since GitHub has file size limitations (100 MB per file, 1 GB recommended per repo), we use the following strategy:
-
-1. **Code Repository**: Contains only code and documentation (~10 MB)
-2. **Data Archive**: Hosted on Zenodo with DOI for permanent access
-3. **Download Scripts**: Provided for users who prefer to download from original sources
+3. **Disk Space**: Ensure at least 100GB free space for:
+   - 48GB data archive
+   - ~20GB for intermediate files during processing
+   - Output figures and tables
 
 ## Troubleshooting
 
-### EORA Data Issues
-- If the EORA website is slow, try downloading during off-peak hours
-- Each year can be processed independently if memory is limited
-- Contact EORA support if download links are broken
+- **Path errors**: Verify data is in `../data/` relative to code directory
+- **Memory errors**: Reduce parallel cores or process data in chunks
+- **Missing files**: Check that extraction preserved the directory structure
 
-### SIPP Data Issues  
-- The Census API may have rate limits; the script includes appropriate delays
-- If downloads fail, check your internet connection and try again
-- Some files are large; ensure sufficient disk space
-
-### Memory Issues
-- The World Bank analysis with I-O matrices requires ~16GB RAM
-- Process years sequentially if memory is limited
-- Consider using a high-performance computing cluster for full replication
-
-## Contact for Data Questions
-
-For questions about data access or processing:
-- SIPP data: Contact U.S. Census Bureau
-- EORA data: Contact support@worldmrio.com
-- Replication issues: Contact dvdijcke@umich.edu
+For questions: dvdijcke@umich.edu

@@ -5,7 +5,10 @@ This checklist helps verify that all analyses in the paper can be successfully r
 ## Prerequisites
 - [ ] R version 4.0 or higher installed
 - [ ] All required packages installed (run `source("00_prep.R")`)
-- [ ] Data downloaded and organized per `data/README_DATA.md`
+- [ ] Data downloaded from openICPSR and organized per `data/README_DATA.md`
+  - [ ] Download data archive from: [openICPSR URL - to be added]
+  - [ ] Extract and rename `data_clean/` to `data/`
+  - [ ] Place `data/` at same level as `code/` directory
 
 ## Simulations (Section 3 of paper)
 
@@ -23,7 +26,8 @@ This checklist helps verify that all analyses in the paper can be successfully r
 ### Application 1: SIPP Occupation Analysis
 
 #### Data Preparation
-- [ ] Run `source("Applications/10_grabSIPP.R")` to download SIPP data
+- [ ] If using openICPSR data: SIPP data is already included in `data/in/`
+- [ ] Alternative: Run `source("Applications/10_grabSIPP.R")` to download from Census
 - [ ] Run `source("Applications/processSIPP.R")` to process data
 - [ ] Verify output: `data/out/sipp_job_panel.csv` exists
 
@@ -39,8 +43,9 @@ This checklist helps verify that all analyses in the paper can be successfully r
 ### Application 2: World Bank Income Classification
 
 #### Data Preparation
-- [ ] Download EORA I-O data per instructions in `data/README_DATA.md`
-- [ ] Verify EORA data in `data/in/eora_io_data/` for years 2010-2015
+- [ ] If using openICPSR data: EORA data is already included in `data/in/eora_io_data_YYYY/`
+- [ ] Verify EORA data folders exist for years 2010-2021
+- [ ] Note: Analysis uses years 2015-2017 by default (configurable in script)
 
 #### Analysis
 - [ ] Run `source("Applications/WID_PPP.R")`
@@ -68,8 +73,10 @@ This checklist helps verify that all analyses in the paper can be successfully r
 - For manual installation: `install.packages("package_name")`
 
 ### Data Download Issues
-- SIPP: Check internet connection, Census API may have rate limits
-- EORA: Try downloading during off-peak hours, contact support@worldmrio.com if issues persist
+- If using openICPSR archive: Ensure complete extraction and correct directory structure
+- For manual downloads:
+  - SIPP: Check internet connection, Census API may have rate limits
+  - EORA: Try downloading during off-peak hours, contact support@worldmrio.com if issues persist
 
 ## Final Verification
 - [ ] All figures in `figs/` directory match paper
