@@ -17,7 +17,7 @@ DIR.create(DATA_DIR); DIR.create(UNZIP_DIR)
 ###############################################
 ## 1.  Years & URLs ###########################
 ###############################################
-panels   <- 2018:2024       # 2018 panel = ref-year 2017, etc. :contentReference[oaicite:0]{index=0}
+panels   <- 2018:2023       # Only download years used in the paper
 url_core <- sprintf(
   "https://www2.census.gov/programs-surveys/sipp/data/datasets/%d/pu%d_dta.zip",
   panels, panels
@@ -43,69 +43,40 @@ walk(c(url_core, url_rw),
 
 
 ###############################################
-## 1.  Years & URLs (2008-2024 panels) ########
+## Additional download code (COMMENTED OUT) ####
 ###############################################
-panels_new  <- 2018:2024                         # modern one-file panels
-panels_2008 <- 2008                              # legacy multi-wave panel
-panels_2014 <- 2014                              # legacy multi-wave panel
+# The code below downloads older SIPP panels (2008, 2014)
+# These are not used in the paper analysis
+# Uncomment if you need the full historical data
 
-## ---- modern panels ----------------------------------------------------------
-url_core_new <- sprintf(
-  "https://www2.census.gov/programs-surveys/sipp/data/datasets/%d/pu%d_dta.zip",
-  panels_new, panels_new)
-url_rw_new   <- sub("pu", "rw", url_core_new)
-
-## ---- 2008 panel (waves 1-16) -------------------------------------------------
-waves_08     <- 1:16
-url_core_08  <- sprintf(
-  "https://www2.census.gov/programs-surveys/sipp/data/datasets/2008/w%d/l08puw%d.zip",
-  waves_08, waves_08)
-# url_rw_08    <- sprintf(
-#   "https://www2.census.gov/programs-surveys/sipp/data/datasets/2008/w%d/rw08w%d.zip",
+# panels_new  <- 2018:2023                         # modern one-file panels
+# panels_2008 <- 2008                              # legacy multi-wave panel
+# panels_2014 <- 2014                              # legacy multi-wave panel
+# 
+# ## ---- modern panels ----------------------------------------------------------
+# url_core_new <- sprintf(
+#   "https://www2.census.gov/programs-surveys/sipp/data/datasets/%d/pu%d_dta.zip",
+#   panels_new, panels_new)
+# url_rw_new   <- sub("pu", "rw", url_core_new)
+# 
+# ## ---- 2008 panel (waves 1-16) -------------------------------------------------
+# waves_08     <- 1:16
+# url_core_08  <- sprintf(
+#   "https://www2.census.gov/programs-surveys/sipp/data/datasets/2008/w%d/l08puw%d.zip",
 #   waves_08, waves_08)
 # 
-# ## ---- 2014 panel (waves 1-4) --------------------------------------------------
-# waves_14     <- 1:4                # change to 1:5, 1:6 … as more waves release
-# url_core_14  <- sprintf(
-#   "https://www2.census.gov/programs-surveys/sipp/data/datasets/2014/w%d/pu2014w%d_v13.zip",
-#   waves_14, waves_14)
-# # url_rw_14    <- sprintf(
-# #   "https://www2.census.gov/programs-surveys/sipp/data/datasets/2014/w%d/rw14w%d_v13.zip",
-# #   waves_14, waves_14)
+# ## ---- full download list for older panels -------------------------------------
+# all_urls_old <- c(url_core_08)  # Add url_rw_08, url_core_14, etc. if needed
 
-## ---- full download list ------------------------------------------------------
-all_urls <- c(url_core_new, url_rw_new,
-              url_core_14,  url_rw_14,
-              url_core_08,  url_rw_08)
-
-all_urls <- c(url_core_14,  url_rw_14,
-              url_core_08,  url_rw_08)
-
-###############################################
-## 2.  Helper: download + unzip ###############
-###############################################
-download_unzip <- function(url) {
-  zipfile <- file.path(DATA_DIR, basename(url))
-  if (!file.exists(zipfile)) {
-    GET(url,
-        write_disk(zipfile, overwrite = TRUE),
-        timeout(600))
-  }
-  unzip(zipfile, exdir = UNZIP_DIR, junkpaths = TRUE)
-}
-
-pb <- progress_bar$new(
-  total   = length(all_urls),
-  format  = "  downloading :what [:bar] :percent  eta: :eta")
-
-walk(all_urls, ~{
-  pb$tick(tokens = list(what = basename(.x)))
-  download_unzip(.x)
-})
+# The following code section would download older panels - commented out
+# as only 2018-2023 data is used in the paper
 
 
 
-## parse older files
+# The following section is for parsing older ASCII SIPP files (1996-2008)
+# Not needed for 2018-2023 data which comes in .dta format
+# Commented out as not used in the paper
+
 ############################################################
 ##  Helper: read one legacy SIPP ASCII file  (1996-2008)  ##
 ############################################################

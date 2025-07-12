@@ -140,9 +140,9 @@ generate_data_for_power_curve <- function(N_gen, X_vals_gen, metric_type_gen, dg
       if (dgp_type_gen == "dynamic") {
         # Dynamic DGP: covariance structure changes with X
         diag_val <- config_cov$BASE_DIAG_DYNAMIC + 
-                    config_cov$DIAG_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
+          config_cov$DIAG_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
         offdiag_val <- config_cov$BASE_OFFDIAG_DYNAMIC + 
-                       config_cov$OFFDIAG_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
+          config_cov$OFFDIAG_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
         
         diag(Sigma_base) <- pmax(0.1, diag_val)
         if (config_cov$DIM >= 2) {
@@ -207,7 +207,7 @@ generate_data_for_power_curve <- function(N_gen, X_vals_gen, metric_type_gen, dg
       # Base edge probability (no jump)
       if (dgp_type_gen == "dynamic") {
         p_no_jump <- config_net$BETA_MEAN_BASE_DYNAMIC + 
-                     config_net$BETA_MEAN_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
+          config_net$BETA_MEAN_SLOPE_DYNAMIC * (x_i - cutoff_c_gen)
       } else {
         p_no_jump <- config_net$BETA_MEAN_BASE_STATIC
       }
@@ -333,9 +333,9 @@ run_one_power_iteration <- function(N_iter, metric_type_iter, dgp_type_iter,
   tryCatch({
     # Select observations within bandwidth of cutoff
     idx_left_dm <- which(X_scalar_sim_iter >= (cutoff_c_iter - h_selected_iter) & 
-                         X_scalar_sim_iter < cutoff_c_iter)
+                           X_scalar_sim_iter < cutoff_c_iter)
     idx_right_dm <- which(X_scalar_sim_iter >= cutoff_c_iter & 
-                          X_scalar_sim_iter < (cutoff_c_iter + h_selected_iter))
+                            X_scalar_sim_iter < (cutoff_c_iter + h_selected_iter))
     
     min_group_size_dm <- 3
     if (length(idx_left_dm) >= min_group_size_dm && 
@@ -354,13 +354,13 @@ run_one_power_iteration <- function(N_iter, metric_type_iter, dgp_type_iter,
         # Special handling for density space
         qSup_for_dm <- frechet_opts_iter$qSup %||% seq(0, 1, length.out = 50)
         den_opts_for_dm_create <- frechet_opts_iter$den_opts_for_create_density %||% 
-                                  list(kernel = "gauss", nRegGrid = 50)
+          list(kernel = "gauss", nRegGrid = 50)
         
         qin_for_dm_test <- tryCatch({
           lapply(Y_dm_iter, function(obs_raw) {
             .get_quantiles_for_obs_jump_test(obs_raw, 
-                                              qSup_target = qSup_for_dm, 
-                                              den_opts = den_opts_for_dm_create)
+                                             qSup_target = qSup_for_dm, 
+                                             den_opts = den_opts_for_dm_create)
           })
         }, error = function(e_q) { NULL })
         
@@ -389,9 +389,9 @@ run_one_power_iteration <- function(N_iter, metric_type_iter, dgp_type_iter,
   # Return rejection indicators
   return(c(
     my_test_reject = as.integer(!is.na(pval_my_test_iter) && 
-                                pval_my_test_iter < alpha_level_iter),
+                                  pval_my_test_iter < alpha_level_iter),
     dm_test_reject = as.integer(!is.na(pval_dm_test_iter) && 
-                                pval_dm_test_iter < alpha_level_iter)
+                                  pval_dm_test_iter < alpha_level_iter)
   ))
 }
 
@@ -561,7 +561,36 @@ if (parallel_sim) stopCluster(cl)
 cat("All power curve simulations complete.\n")
 
 
-# --- 7. GENERATE TRANSPOSED POWER CURVES PLOT (2x3 instead of 3x2) ---------------
+# --- 7. SAVE RESULTS FOR FUTURE USE ----------------------------------------------
+
+# Save the power results dataframe
+cat("\n--- Saving simulation results ---\n")
+if (!dir.exists("figs/raw_results")) dir.create("figs/raw_results", recursive = TRUE)
+
+saveRDS(all_power_results_df, 
+        file = "figs/raw_results/frechetANOVA_power_results.rds")
+
+# Also save key parameters used in the simulation
+simulation_params <- list(
+  N_SIMULATIONS_POWER_CURVE = N_SIMULATIONS_POWER_CURVE,
+  ALPHA_LEVEL = ALPHA_LEVEL,
+  CUTOFF_C = CUTOFF_C,
+  SAMPLE_SIZE_POWER_CURVE = SAMPLE_SIZE_POWER_CURVE,
+  DENSITY_JUMP_PARAM_VALUES = DENSITY_JUMP_PARAM_VALUES,
+  COVARIANCE_JUMP_PARAM_VALUES = COVARIANCE_JUMP_PARAM_VALUES,
+  NETWORK_JUMP_PARAM_VALUES = NETWORK_JUMP_PARAM_VALUES,
+  LOG_COV_JUMP_FACTORS = LOG_COV_JUMP_FACTORS,
+  dgp_types_to_run = dgp_types_to_run,
+  metric_spaces_to_run_power = metric_spaces_to_run_power
+)
+
+saveRDS(simulation_params, 
+        file = "figs/raw_results/frechetANOVA_simulation_params.rds")
+
+cat("Power results and parameters saved to figs/raw_results/\n")
+
+
+# --- 8. GENERATE TRANSPOSED POWER CURVES PLOT (2x3 instead of 3x2) ---------------
 
 if (requireNamespace("ggplot2", quietly = TRUE) &&
     requireNamespace("tidyr", quietly = TRUE) &&
@@ -601,10 +630,10 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
       current_x_axis_label_plot <- unique(current_plot_data_df_plot$param_name_x_axis)
       
       # Create subplot title
-      subplot_title_text_full <- paste0("(", LETTERS[subplot_idx_counter], ") ", 
-                                        tools::toTitleCase(metric_plot_loop), 
-                                        " (", tools::toTitleCase(dgp_plot_loop), " DGP)")
-      
+      dgp_label <- ifelse(dgp_plot_loop == "dynamic", "Pw-Smooth", "Pw-Const.")
+      subplot_title_text_full <- paste0("(", LETTERS[subplot_idx_counter], ") ",
+                                        tools::toTitleCase(metric_plot_loop),
+                                        " (", dgp_label, " DGP)")
       # Reshape data for plotting
       power_results_long_plot <- tidyr::pivot_longer(
         current_plot_data_df_plot, 
@@ -619,10 +648,10 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
         labels = test_labels
       )
       
-      # Create subplot
+      # Create subplot with LARGER text sizes
       p_current_subplot <- ggplot(power_results_long_plot, 
-                                   aes(x = param_value, y = Power, 
-                                       color = Test, linetype = Test, shape = Test)) +
+                                  aes(x = param_value, y = Power, 
+                                      color = Test, linetype = Test, shape = Test)) +
         geom_line(linewidth = 0.9) + 
         geom_point(size = 2.5, stroke = 0.7) +
         geom_hline(yintercept = ALPHA_LEVEL, linetype = "dashed", 
@@ -636,14 +665,14 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
         scale_color_manual(values = test_colors, name = "Test Method") + 
         scale_shape_manual(values = test_shapes, name = "Test Method") +
         scale_linetype_manual(values = test_linetypes, name = "Test Method") +
-        theme_classic(base_size = 11) +
+        theme_classic(base_size = 14) +  # Increased from 11 to 14
         theme(
           legend.position = "none", 
-          plot.title = element_text(hjust = 0.5, size = rel(0.95), face = "plain"),
+          plot.title = element_text(hjust = 0.5, size = rel(1.0), face = "plain"),  # Larger title
           plot.margin = unit(c(0.2, 0.2, 0.2, 0.2), "cm"), 
-          axis.title.x = element_text(size = rel(0.9), margin = margin(t = 5)),
-          axis.title.y = element_text(size = rel(0.9), margin = margin(r = 5)), 
-          axis.text = element_text(size = rel(0.85))
+          axis.title.x = element_text(size = rel(0.9), margin = margin(t = 5)),  # Larger x-axis label
+          axis.title.y = element_text(size = rel(0.9), margin = margin(r = 5)),  # Larger y-axis label
+          axis.text = element_text(size = rel(0.8))  # Larger axis text
         )
       
       # Special x-axis handling for covariance space (log scale)
@@ -679,24 +708,22 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
   # Combine plots in 2x3 layout (DGP types in rows, metric spaces in columns)
   if (length(plot_list_final) == 6) {
     combined_figure_patch <- (plot_list_final[[1]] | plot_list_final[[2]] | plot_list_final[[3]]) / 
-                             (plot_list_final[[4]] | plot_list_final[[5]] | plot_list_final[[6]])
+      (plot_list_final[[4]] | plot_list_final[[5]] | plot_list_final[[6]])
     
-    # Add legend and caption
+    # Add legend and caption with CLEAN legend box
     final_figure_with_legend <- combined_figure_patch + 
-      plot_layout(guides = "collect") +
-      plot_annotation(
-        caption = paste0("N = ", SAMPLE_SIZE_POWER_CURVE, 
-                         ", Test Level α = ", ALPHA_LEVEL,
-                         ". Results based on ", N_SIMULATIONS_POWER_CURVE, 
-                         " Monte Carlo simulations per point.")
-      ) &
+      plot_layout(guides = "collect")  &
       theme(
         legend.position = "bottom", 
         legend.box.margin = margin(t = 15, b = 5), 
-        legend.title = element_text(face = "bold", size = rel(1.0)),
-        legend.text = element_text(size = rel(0.9)), 
-        plot.caption = element_text(hjust = 0.5, size = rel(0.9), 
-                                    margin = margin(t = 15, b = 5))
+        legend.title = element_text(face = "bold", size = rel(1.1)),  # Larger legend title
+        legend.text = element_text(size = rel(1.0)),  # Larger legend text
+        plot.caption = element_text(hjust = 0.5, size = rel(1.0),  # Larger caption
+                                    margin = margin(t = 15, b = 5)),
+        # Remove grey box around legend
+        legend.background = element_rect(fill = "transparent", color = NA),
+        legend.box.background = element_rect(fill = "transparent", color = NA),
+        legend.key = element_rect(fill = "transparent", color = NA)
       )
     
     print(final_figure_with_legend)
@@ -710,7 +737,8 @@ if (requireNamespace("ggplot2", quietly = TRUE) &&
     
     ggsave(file.path(figs_dir_path, combined_plot_filename_final), 
            plot = final_figure_with_legend, 
-           width = 12, height = 8, dpi = 300)
+           width = 12, height = 8, dpi = 300,
+           bg = "white")  # Ensure white background in saved file
     
     cat(paste0("Combined stacked power curve plot (2x3 layout) saved to ", 
                file.path(figs_dir_path, combined_plot_filename_final), "\n"))

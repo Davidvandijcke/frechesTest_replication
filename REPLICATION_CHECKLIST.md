@@ -23,22 +23,20 @@ This checklist helps verify that all analyses in the paper can be successfully r
 
 ## Empirical Applications (Section 4 of paper)
 
-### Application 1: SIPP Occupation Analysis
+### Application 1: SIPP Occupation Analysis (Washington State)
 
 #### Data Preparation
-- [ ] If using openICPSR data: SIPP data is already included in `data/in/`
+- [ ] If using openICPSR data: SIPP data (2018-2023) is already included in `data/in/`
 - [ ] Alternative: Run `source("Applications/10_grabSIPP.R")` to download from Census
-- [ ] Run `source("Applications/processSIPP.R")` to process data
+- [ ] Run `source("Applications/processSIPP.R")` to process data (2018-2023 only)
 - [ ] Verify output: `data/out/sipp_job_panel.csv` exists
 
 #### Analysis
 - [ ] Run `source("Applications/occ_anova.R")`
 
 #### Expected Outputs
-- [ ] Figure 2: `figs/transition_heatmap.png`
-- [ ] Figure 3: `figs/wfh_composition_combined.png`
-- [ ] Table 2: `tabs/summary_stats_table.tex`
-- [ ] Table 3: `tabs/rdd_balance_tests.tex`
+- [ ] Figure 2: `figs/wfh_composition_combined.png`
+- [ ] Figure 3: `figs/frechet_mean_composition.png`
 
 ### Application 2: World Bank Income Classification
 
@@ -52,15 +50,7 @@ This checklist helps verify that all analyses in the paper can be successfully r
 
 #### Expected Outputs
 - [ ] Figure 4: Network difference plots
-  - [ ] `figs/network_difference_A_matrix.png`
-  - [ ] `figs/network_difference_L_matrix.png`
-- [ ] Figure 5: RDD plots for scalar outcomes
-  - [ ] `figs/rdd_plot_upstream_centrality.png`
-  - [ ] `figs/rdd_plot_downstream_centrality.png`
-  - [ ] `figs/rdd_plot_manufacturing_intensity.png`
-  - [ ] `figs/rdd_plot_services_intensity.png`
-- [ ] Table 4: `tabs/scalar_rdd_results_summary.csv`
-- [ ] Additional results: `tabs/frechet_test_results_summary.csv`
+  - [ ] `figs/frechet_diff_lagged_rv_2015_io_lag_2`
 
 ## Troubleshooting
 
@@ -85,6 +75,6 @@ This checklist helps verify that all analyses in the paper can be successfully r
 - [ ] Results are reproducible across multiple runs (set seed is used)
 
 ## Notes
-- Total runtime: ~4-6 hours depending on system
-- Simulations can be run in parallel (default) or serial mode
+- Total runtime: applications ~30 minutes depending on system
+- Simulations can be run in parallel (default and recommended) or serial mode
 - Some randomness is expected in bootstrap confidence intervals

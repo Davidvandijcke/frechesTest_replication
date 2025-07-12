@@ -31,12 +31,12 @@ The required packages are automatically installed by running `00_prep.R`. Key pa
 │   └── man/                  # Package documentation
 │
 ├── Simulations/
-│   ├── frechesTest_simulations.R    # Monte Carlo simulations for test performance
-│   └── frechetANOVA_simulations.R   # Power curve comparisons with Fréchet ANOVA
+│   ├── frechesTest_simulations.R    # Monte Carlo simulations for test performance -- Table 1 in paper
+│   └── frechetANOVA_simulations.R   # Power curve comparisons with Fréchet ANOVA -- Figure 1 in paper
 │
 ├── Applications/
-│   ├── occ_anova.R           # SIPP occupation/industry transition analysis
-│   ├── WID_PPP.R             # World Bank income classification analysis
+│   ├── occ_anova.R           # SIPP occupation/industry transition analysis -- Figure 2 & 3 in paper
+│   ├── WID_PPP.R             # World Bank income classification analysis -- Figure 4 in paper
 │   ├── 10_grabSIPP.R         # SIPP data download script
 │   └── processSIPP.R         # SIPP data processing
 │
@@ -52,7 +52,7 @@ The complete data required for replication is available from openICPSR at: [URL 
 ### Data Download and Setup
 
 1. **Download the replication data** from openICPSR
-   - The data archive contains a `data_clean/` folder (48GB compressed)
+   - The data archive contains a `data_clean/` folder (31GB)
    - Extract this folder and rename it to `data/`
    - Place it in the same directory as this code folder
 
@@ -60,8 +60,8 @@ The complete data required for replication is available from openICPSR at: [URL 
    ```
    data/
    ├── in/
-   │   ├── sipp_raw/             # Raw SIPP data files (52 zip files)
-   │   ├── sipp_unzipped/        # Pre-unzipped SIPP data (10 .dta files)
+   │   ├── sipp_raw/             # Raw SIPP data files (12 zip files, 2018-2023 only)
+   │   ├── sipp_unzipped/        # Pre-unzipped SIPP data (6 .dta files, 2018-2023 only)
    │   ├── SIPP_data_dictionaries/
    │   ├── eora_io_data_2010/    # EORA I-O data by year
    │   ├── eora_io_data_2011/
@@ -78,8 +78,8 @@ The data archive contains processed versions of:
 
 1. **SIPP Data** (Survey of Income and Program Participation)
    - Source: U.S. Census Bureau
-   - Years: 2008-2023
-   - Used for occupation/industry transition analysis
+   - Years: 2018-2023 (only these years are included and used)
+   - Used for occupation/industry transition analysis in Washington state
 
 2. **EORA Input-Output Tables**
    - Source: https://worldmrio.com/
@@ -123,8 +123,7 @@ source("frechetANOVA_simulations.R")
 ### 3. Run Empirical Applications
 ```r
 # SIPP occupation analysis (Figures 2-3, Tables 2-3)
-# First download and process SIPP data:
-source("10_grabSIPP.R")
+# First process SIPP data:
 source("processSIPP.R")
 # Then run analysis:
 source("occ_anova.R")

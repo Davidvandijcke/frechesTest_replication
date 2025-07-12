@@ -1,5 +1,6 @@
 ###############################################################################
 #  SIPP spell-panel (with class-of-worker, RMESR status & demographics)      #
+#  Modified to only process years 2018-2023 as used in the paper             #
 ###############################################################################
 library(data.table)
 library(haven)
@@ -164,19 +165,13 @@ read_one_panel <- function(path){
 
 
 # ---------------------------------------------------------------------------
+# Only process SIPP files from 2018-2023
 sipp_files <- list.files(
   file.path(dataIn, "sipp_unzipped"),
-  pattern = "pu.*$",   # only names that contain “pu” and end in .dta
+  pattern = "pu(2018|2019|2020|2021|2022|2023).*\\.dta$",   # only 2018-2023 files
   full.names = TRUE,
-  ignore.case = TRUE         # drop this line if you need case-sensitive matching
+  ignore.case = TRUE
 )
-
-files_08 <- list.files(
-  file.path(dataIn, "sippsets08"),
-  full.names = TRUE,
-  ignore.case = TRUE         # drop this line if you need case-sensitive matching
-)
-sipp_files <- c(sipp_files, files_08)
 
 dt <- rbindlist(lapply(sipp_files, read_one_panel), use.names = TRUE, fill = TRUE)
 setorder(dt, ssuid, pnum, job_start_year, month)

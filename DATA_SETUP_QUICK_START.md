@@ -4,7 +4,7 @@
 
 1. **Download the data archive** from openICPSR:
    - URL: [To be added after upload]
-   - Size: 48GB compressed
+   - Size: 31GB compressed
 
 2. **Extract and organize**:
    ```bash

@@ -65,3 +65,4 @@ frechesTest/figs/powercurves/
 
 # Archive directory (old/unused files)
 _archive/
+.Rproj.user

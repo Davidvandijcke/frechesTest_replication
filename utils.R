@@ -1,3 +1,33 @@
+
+# Utility functions
+format_number <- function(x, digits = 2, big.mark = ",") {
+  formatC(x, format = "f", digits = digits, big.mark = big.mark)
+}
+
+save_plot <- function(plot, filename, path = figs, width = 8, height = 6, dpi = 300) {
+  base_path <- file.path(path, filename)
+  
+  # Save as PDF
+  ggsave(
+    filename = paste0(base_path, ".pdf"),
+    plot = plot,
+    width = width,
+    height = height,
+    device = "pdf"
+  )
+  
+  # Save as PNG
+  ggsave(
+    filename = paste0(base_path, ".png"),
+    plot = plot,
+    width = width,
+    height = height,
+    dpi = dpi,
+    device = "png"
+  )
+}
+
+
 # --- GSP BENEFICIARY COUNTRIES LIST ---
 # Source: Based on U.S. Trade Representative (USTR) designated beneficiary lists.
 # This list is comprehensive but static. For a formal publication, one might use

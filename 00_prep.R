@@ -12,17 +12,17 @@ packages_load <- c(
   "data.table",
   
   # Statistical analysis
-  "rddisttest",
-  "frechesTest",
   "rdd",
   "rddensity",
   "rdrobust",
   
   # Visualization
   "ggplot2",
+  "remotes",
   "scales",
   "viridis",
   "RColorBrewer",
+  "countrycode",
   "reshape2",
   
   # Utilities
@@ -34,6 +34,8 @@ packages_load <- c(
 sink("/dev/null") # load packages but suppress output
 if (!require("pacman")) install.packages("pacman")
 pacman::p_load(char = packages_load, character.only = TRUE)
+remotes::install_github("Davidvandijcke/frechesTest")
+library(frechesTest)
 
 
 sink()
@@ -136,31 +138,3 @@ options(
   ggplot2.discrete.colour = project_colors$categorical,
   ggplot2.discrete.fill = project_colors$categorical
 )
-
-# Utility functions
-format_number <- function(x, digits = 2, big.mark = ",") {
-  formatC(x, format = "f", digits = digits, big.mark = big.mark)
-}
-
-save_plot <- function(plot, filename, path = figs, width = 8, height = 6, dpi = 300) {
-  base_path <- file.path(path, filename)
-  
-  # Save as PDF
-  ggsave(
-    filename = paste0(base_path, ".pdf"),
-    plot = plot,
-    width = width,
-    height = height,
-    device = "pdf"
-  )
-  
-  # Save as PNG
-  ggsave(
-    filename = paste0(base_path, ".png"),
-    plot = plot,
-    width = width,
-    height = height,
-    dpi = dpi,
-    device = "png"
-  )
-}

@@ -7,7 +7,7 @@ This document provides instructions for obtaining and organizing the data needed
 **The complete replication data is available at**: [openICPSR URL - to be added after upload]
 
 ### Setup Instructions:
-1. Download the data archive from openICPSR (48GB)
+1. Download the data archive from openICPSR (31GB)
 2. Extract the `data_clean/` folder from the archive
 3. Rename `data_clean/` to `data/`
 4. Place it at the same level as the `code/` directory (not inside it)
@@ -28,9 +28,9 @@ frechet_anova/
 The openICPSR archive contains all necessary data files:
 
 ### Input Data (`data/in/`)
-- **SIPP Data** (2008-2023)
-  - `sipp_raw/`: 52 raw zip files from Census Bureau
-  - `sipp_unzipped/`: 10 pre-unzipped .dta files
+- **SIPP Data** (2018-2023 only)
+  - `sipp_raw/`: 12 raw zip files from Census Bureau (2018-2023)
+  - `sipp_unzipped/`: 6 pre-unzipped .dta files (2018-2023)
   - `SIPP_data_dictionaries/`: PDF documentation
 
 - **EORA Input-Output Tables** (2010-2021)
@@ -74,8 +74,8 @@ source("../data/in/getOECD_IO.R")
    - Process years sequentially in `WID_PPP.R`
    - Use fewer parallel cores in simulations
 
-3. **Disk Space**: Ensure at least 100GB free space for:
-   - 48GB data archive
+3. **Disk Space**: Ensure at least 80GB free space for:
+   - 31GB data archive
    - ~20GB for intermediate files during processing
    - Output figures and tables
 
