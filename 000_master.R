@@ -17,10 +17,9 @@ setwd(codeDir) # sets cd to program directory
 
 dir <- sub("/[^/]+$", "", codeDir)# get main directory
 
-# MODIFIED: Use data_clean instead of data
-dataIn <- file.path(dir, "data_clean", "in")
-dataBy <- file.path(dir, "data_clean", "by")
-dataOut <- file.path(dir, "data_clean", "out")
+dataIn <- file.path(dir, "data", "in")
+dataBy <- file.path(dir, "data", "by")
+dataOut <- file.path(dir, "data", "out")
 tabs <- file.path(codeDir, "tabs")
 figs <- file.path(codeDir, "figs")
 

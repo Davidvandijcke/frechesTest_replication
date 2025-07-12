@@ -4,13 +4,12 @@ This document provides instructions for obtaining and organizing the data needed
 
 ## Quick Start: Download from openICPSR
 
-**The complete replication data is available at**: [openICPSR URL - to be added after upload]
+**The complete replication data is available at**: https://huggingface.co/datasets/dvdijcke/frechesTest_replication
 
 ### Setup Instructions:
-1. Download the data archive from openICPSR (31GB)
-2. Extract the `data_clean/` folder from the archive
-3. Rename `data_clean/` to `data/`
-4. Place it at the same level as the `code/` directory (not inside it)
+1. Download the data archive from huggingface ()
+2. Rename it to `data/`
+3. Place it at the same level as the `code/` directory (not inside it)
 
 Your directory structure should look like:
 ```

@@ -47,13 +47,12 @@ The required packages are automatically installed by running `00_prep.R`. Key pa
 
 ## Data Requirements
 
-The complete data required for replication is available from openICPSR at: [URL to be added after upload]
+The complete data required for replication is available from huggingface at https://huggingface.co/datasets/dvdijcke/frechesTest_replication
 
 ### Data Download and Setup
 
-1. **Download the replication data** from openICPSR
-   - The data archive contains a `data_clean/` folder (31GB)
-   - Extract this folder and rename it to `data/`
+1. **Download the replication data** from huggingface (29GB)
+   - Pull the folder and rename it to `data/`
    - Place it in the same directory as this code folder
 
 2. **Verify the data structure**:
