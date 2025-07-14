@@ -1,0 +1,3 @@
+[submodule "frechesTest"]
+	path = frechesTest
+	url = https://github.com/Davidvandijcke/frechesTest.git
